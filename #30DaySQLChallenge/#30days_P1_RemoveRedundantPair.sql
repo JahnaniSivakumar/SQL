@@ -35,15 +35,15 @@ SELECT * FROM brands;
 -- Solution
 
 WITH creating_pair_id AS (
-							SELECT *, 
-							CASE WHEN brand1 < brand2 THEN concat(brand1, brand2, year) 
-								 ELSE concat(brand2, brand1, year) 
-							     END AS pair_id
-							FROM brands),
+			  SELECT *, 
+			  CASE WHEN brand1 < brand2 THEN concat(brand1, brand2, year) 
+			  ELSE concat(brand2, brand1, year) 
+			  END AS pair_id
+			  FROM brands),
 			
 creating_flag AS (
-					SELECT *, ROW_NUMBER() OVER(PARTITION BY pair_id ORDER BY pair_id) AS flag 
-					FROM creating_pair_id)
+		  SELECT *, ROW_NUMBER() OVER(PARTITION BY pair_id ORDER BY pair_id) AS flag 
+		  FROM creating_pair_id)
 
 SELECT *
 FROM creating_flag
