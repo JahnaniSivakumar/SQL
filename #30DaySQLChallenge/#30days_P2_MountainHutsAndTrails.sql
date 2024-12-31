@@ -49,31 +49,31 @@ Output returned by the query can be ordered in any way.
 
 -- Solution
 WITH trail_1 AS (
-					SELECT t1.hut1 AS start_hut, m1.name AS start_hut_name,
-					m1.altitude AS start_hut_altitude, t1.hut2 AS end_hut
-					FROM trails t1
-					JOIN mountain_huts m1 ON
-					m1.id = t1.hut1),
+		  SELECT t1.hut1 AS start_hut, m1.name AS start_hut_name,
+		  m1.altitude AS start_hut_altitude, t1.hut2 AS end_hut
+		  FROM trails t1
+		  JOIN mountain_huts m1 ON
+		  m1.id = t1.hut1),
 
 
 trail_2 AS(
-			SELECT  t2.*, m2.name AS end_hut_name, m2.altitude AS end_hut_altitude,
-			CASE WHEN start_hut_altitude > m2.altitude THEN 1 ELSE 0 END AS altitude_flag
-			FROM trail_1 t2
-			JOIN mountain_huts m2 ON 
-			m2.id = t2.end_hut), 
+	    SELECT  t2.*, m2.name AS end_hut_name, m2.altitude AS end_hut_altitude,
+            CASE WHEN start_hut_altitude > m2.altitude THEN 1 ELSE 0 END AS altitude_flag
+            FROM trail_1 t2
+	    JOIN mountain_huts m2 ON 
+            m2.id = t2.end_hut), 
 
 sorted_trail AS(
-					SELECT 
-					CASE WHEN altitude_flag = 1 THEN start_hut  
-						 ELSE end_hut END AS start_hut,
-					CASE WHEN altitude_flag = 1 THEN start_hut_name 
-						 ELSE end_hut_name END AS start_hut_name,
-					CASE WHEN altitude_flag = 1 THEN end_hut  
-						 ELSE start_hut END AS end_hut,
-					CASE WHEN altitude_flag = 1 THEN end_hut_name 
-						 ELSE start_hut_name END AS end_hut_name 
-					FROM trail_2)
+		SELECT 
+		CASE WHEN altitude_flag = 1 THEN start_hut  
+		     ELSE end_hut END AS start_hut,
+		CASE WHEN altitude_flag = 1 THEN start_hut_name 
+                     ELSE end_hut_name END AS start_hut_name,
+		CASE WHEN altitude_flag = 1 THEN end_hut
+		     ELSE start_hut END AS end_hut,
+		CASE WHEN altitude_flag = 1 THEN end_hut_name 
+	             ELSE start_hut_name END AS end_hut_name 
+		FROM trail_2)
 
 
 -- Possible three way trails: 
